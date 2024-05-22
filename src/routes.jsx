@@ -15,14 +15,6 @@ const routes = [
         Sidebar: null,
     },
     {
-        path: "/store/:id/register-admin",
-        Element: () => (
-        <RegisterAdmin />
-        ),
-        isAuthenticated: true,
-        role: null,
-    },
-    {
         path: "/merchant/dashboard",
         Element: () => (
             <Merchant_Dashboard />
@@ -48,6 +40,14 @@ const routes = [
         ),
         isAuthenticated: true,
         role: "admin",
+    },
+    {
+        path: "/store/:id/register-admin",
+        Element: () => (
+        <RegisterAdmin />
+        ),
+        isAuthenticated: true,
+        role: null,
     },
 ];
 

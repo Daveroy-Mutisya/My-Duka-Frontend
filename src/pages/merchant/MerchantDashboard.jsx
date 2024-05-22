@@ -10,11 +10,11 @@ const MerchantDashboard = () => {
     const [requests, setRequests] = useState([]);
 
     useEffect(() => {
-        // Fetch stores
+        const token = localStorage.getItem('token');
         fetch(`${BASE_URL}/stores`, {
             headers: {
-                Authorization: `Bearer ${localStorage.getItem('token')}`
-            }
+                'Authorization': 'Bearer ' + token,
+              }
         })
         .then(response => response.json())
         .then(data => setStores(data.stores))
