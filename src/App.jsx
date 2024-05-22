@@ -10,7 +10,7 @@ export const BASE_URL='https://deploying-myduka-backend.onrender.com';
 function App() {
   return (
     <Routes>
-      <Route path="/login" element={<Login />} />
+      <Route path="/" element={<Login />} />
     </Routes>
   );
 }
