@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 
 const BASE_URL = 'https://deploying-myduka-backend.onrender.com';
 
@@ -15,18 +14,55 @@ const InviteAdmin = () => {
         setError('');
 
         try {
-            const response = await axios.post(`${BASE_URL}/invite-admin`, {
-                email,
-                store_id: storeId
+            //this access the login endpoint to get the refresh token
+            const loginResponse = await fetch(`${BASE_URL}/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: 'myduka7@gmail.com', // i have used the merchant email and password to get the authorization
+                    password: 'Merchant1@pass'
+                })
+            });
+            const { refreshToken } = await loginResponse.json();
+
+            //This uses the refresh token gotten from the login page to get the access token
+            const refreshTokenResponse = await fetch(`${BASE_URL}/refresh-token`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({ refreshToken })
+            });
+            const { accessToken } = await refreshTokenResponse.json();
+
+            //this sends the access token for auth allowing the merchant to send an invite to an admin
+            const inviteResponse = await fetch(`${BASE_URL}/invite-admin`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email,
+                    store_id: storeId
+                })
             });
 
-            setMessage(response.data.message);
-        } catch (error) {
-            if (error.response) {
-                setError(error.response.data.error);
-            } else {
-                setError('An error occurred. Please try again.');
+            if (!inviteResponse.ok) {
+                throw new Error('Failed to invite admin');
             }
+
+            // Display success message
+            setMessage('Admin invited successfully');
+
+            // Clear form fields after successful invite
+            setEmail('');
+            setStoreId('');
+        } catch (error) {
+            // Display error message
+            setError(error.message || 'An error occurred. Please try again.');
         }
     };
 
@@ -69,3 +105,4 @@ const InviteAdmin = () => {
 };
 
 export default InviteAdmin;
+
