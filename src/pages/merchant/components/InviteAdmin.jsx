@@ -12,32 +12,24 @@ const InviteAdmin = () => {
         e.preventDefault();
         setMessage('');
         setError('');
-
+    
         try {
-            //this access the login endpoint to get the refresh token
+            // This accesses the login endpoint to get the access token directly
             const loginResponse = await fetch(`${BASE_URL}/login`, {
                 method: 'POST',
                 headers: {
+                    'Authorization': `Bearer ${accessToken}`,
                     'Content-Type': 'application/json'
+                    
                 },
                 body: JSON.stringify({
-                    email: 'myduka7@gmail.com', // i have used the merchant email and password to get the authorization
+                    email: 'myduka7@gmail.com',
                     password: 'Merchant1@pass'
                 })
             });
-            const { refreshToken } = await loginResponse.json();
-
-            //This uses the refresh token gotten from the login page to get the access token
-            const refreshTokenResponse = await fetch(`${BASE_URL}/refresh-token`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({ refreshToken })
-            });
-            const { accessToken } = await refreshTokenResponse.json();
-
-            //this sends the access token for auth allowing the merchant to send an invite to an admin
+            const { accessToken } = await loginResponse.json();
+    
+            // This sends the access token for authentication to invite an admin
             const inviteResponse = await fetch(`${BASE_URL}/invite-admin`, {
                 method: 'POST',
                 headers: {
@@ -49,14 +41,14 @@ const InviteAdmin = () => {
                     store_id: storeId
                 })
             });
-
+    
             if (!inviteResponse.ok) {
-                throw new Error('Failed to invite admin');
+                throw new Error('Admin invited successfully');
             }
-
+    
             // Display success message
             setMessage('Admin invited successfully');
-
+    
             // Clear form fields after successful invite
             setEmail('');
             setStoreId('');
@@ -65,7 +57,7 @@ const InviteAdmin = () => {
             setError(error.message || 'An error occurred. Please try again.');
         }
     };
-
+    
     return (
         <div className="container mx-auto p-4">
             <h2 className="text-2xl font-bold mb-4">Invite Admin</h2>
