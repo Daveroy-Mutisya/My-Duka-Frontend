@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import './App.css'
-import Login from './pages/Login/login';
+import Login from './pages/Auth/login';
 import React from 'react';
 import { Routes, Route } from 'react-router-dom';
 
