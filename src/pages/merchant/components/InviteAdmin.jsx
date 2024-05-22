@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import axios from 'axios';
 
 const BASE_URL = 'https://deploying-myduka-backend.onrender.com';
 
@@ -15,55 +14,82 @@ const InviteAdmin = () => {
         setError('');
 
         try {
-            const response = await axios.post(`${BASE_URL}/invite-admin`, {
-                email,
-                store_id: storeId
+            const loginResponse = await fetch(`${BASE_URL}/login`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email: 'myduka7@gmail.com',
+                    password: 'Merchant1@pass'
+                })
             });
 
-            setMessage(response.data.message);
-        } catch (error) {
-            if (error.response) {
-                setError(error.response.data.error);
-            } else {
-                setError('An error occurred. Please try again.');
+            if (!loginResponse.ok) {
+                throw new Error('Failed to log in');
             }
+
+            const { accessToken } = await loginResponse.json();
+
+            const inviteResponse = await fetch(`${BASE_URL}/invite-admin`, {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`,
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    email,
+                    store_id: storeId
+                })
+            });
+
+            if (!inviteResponse.ok) {
+                const errorData = await inviteResponse.json();
+                throw new Error(errorData.message || 'Failed to invite admin');
+            }
+
+            setMessage('Admin invited successfully');
+            setEmail('');
+            setStoreId('');
+        } catch (error) {
+            setError(error.message || 'An error occurred. Please try again.');
         }
     };
 
     return (
-        <div className="container mx-auto p-4">
-            <h2 className="text-2xl font-bold mb-4">Invite Admin</h2>
-            <form onSubmit={handleInvite} className="space-y-4">
-                <div>
-                    <label htmlFor="email" className="block text-sm font-medium text-gray-700">Admin Email</label>
+        <div className="invite-admin-container">
+            <h2 className="invite-admin-title text-2xl mb-4">Invite Admin</h2>
+            <form onSubmit={handleInvite} className="invite-admin-form">
+                <div className="form-group mb-4">
+                    <label htmlFor="email" className="form-label block">Admin Email</label>
                     <input
                         type="email"
                         id="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        className="form-input w-full"
                         required
                     />
                 </div>
-                <div>
-                    <label htmlFor="storeId" className="block text-sm font-medium text-gray-700">Store ID</label>
+                <div className="form-group mb-4">
+                    <label htmlFor="storeId" className="form-label block">Store ID</label>
                     <input
                         type="text"
                         id="storeId"
                         value={storeId}
                         onChange={(e) => setStoreId(e.target.value)}
-                        className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                        className="form-input w-full"
                         required
                     />
                 </div>
-                <div>
-                    <button type="submit" className="w-full px-4 py-2 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-400 focus:outline-none focus:bg-blue-400">
+                <div className="form-group">
+                    <button type="submit" className="invite-admin-button bg-blue-500 text-white px-4 py-2 rounded hover:bg-blue-600">
                         Send Invite
                     </button>
                 </div>
             </form>
-            {message && <p className="mt-4 text-green-500">{message}</p>}
-            {error && <p className="mt-4 text-red-500">{error}</p>}
+            {message && <p className="invite-admin-message invite-admin-success text-green-500">{message}</p>}
+            {error && <p className="invite-admin-message invite-admin-error text-red-500">{error}</p>}
         </div>
     );
 };
