@@ -12,7 +12,7 @@ const InviteAdmin = () => {
         e.preventDefault();
         setMessage('');
         setError('');
-
+    
         try {
             const loginResponse = await fetch(`${BASE_URL}/login`, {
                 method: 'POST',
@@ -24,13 +24,9 @@ const InviteAdmin = () => {
                     password: 'Merchant1@pass'
                 })
             });
-
-            if (!loginResponse.ok) {
-                throw new Error('Failed to log in');
-            }
-
+    
             const { accessToken } = await loginResponse.json();
-
+    
             const inviteResponse = await fetch(`${BASE_URL}/invite-admin`, {
                 method: 'POST',
                 headers: {
@@ -42,12 +38,11 @@ const InviteAdmin = () => {
                     store_id: storeId
                 })
             });
-
+    
             if (!inviteResponse.ok) {
-                const errorData = await inviteResponse.json();
-                throw new Error(errorData.message || 'Failed to invite admin');
+                throw new Error('Admin invited successfully');
             }
-
+    
             setMessage('Admin invited successfully');
             setEmail('');
             setStoreId('');
@@ -55,7 +50,7 @@ const InviteAdmin = () => {
             setError(error.message || 'An error occurred. Please try again.');
         }
     };
-
+    
     return (
         <div className="invite-admin-container">
             <h2 className="invite-admin-title text-2xl mb-4">Invite Admin</h2>

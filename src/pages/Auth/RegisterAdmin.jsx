@@ -2,10 +2,11 @@ import React, { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const BASE_URL = 'https://deploying-myduka-backend.onrender.com';
+const INVITE_REGISTER_TOKEN = "JE5U5_L0V35_U"; // Added const keyword
 
 const RegisterAdmin = () => {
     const { id } = useParams(); // Get store ID from URL
-    const [token, setToken] = useState(''); // You may set this from the URL or other sources
+    const [token, setToken] = useState(INVITE_REGISTER_TOKEN); // Default to INVITE_REGISTER_TOKEN
     const [name, setName] = useState('');
     const [email, setEmail] = useState('');
     const [username, setUsername] = useState('');
