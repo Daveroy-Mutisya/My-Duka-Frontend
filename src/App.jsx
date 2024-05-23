@@ -8,6 +8,8 @@ import ClerkDashboard from './pages/clerk/ClerkDashboard';
 import AdminDashboard from './pages/admin/AdminDashboard';
 import MerchantDashboard from './pages/merchant/MerchantDashboard';
 import InviteAdmin from './pages/merchant/components/InviteAdmin';
+import Stores from './pages/merchant/components/Stores';
+
 
 export const BASE_URL='https://deploying-myduka-backend.onrender.com';
 
@@ -19,7 +21,8 @@ function App() {
       <Route path="/admin/dashboard" element={<AdminDashboard/>} />
       <Route path="/clerk/dashboard" element={<ClerkDashboard/>} />
       <Route path="merchant/invite-admin" element={<InviteAdmin />} />
-      <Route path="/store/:id/register-admin" component={<RegisterAdmin/>} />
+      <Route path="merchant/store/:id/register-admin" component={<RegisterAdmin/>} />
+      <Route path="/Stores" element={<Stores/>} />
     </Routes>
   );
 }
