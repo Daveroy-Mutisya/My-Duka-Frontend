@@ -1,54 +1,131 @@
-import React from "react";
-import { Link } from 'react-router-dom'; // Import Link from React Router
+import * as React from 'react';
+import { FormControl, useFormControlContext } from '@mui/base/FormControl';
+import { Input, inputClasses } from '@mui/base/Input';
+import { styled } from '@mui/system';
+import clsx from 'clsx';
 
-const NewClerkForm = () => {
-    return (
-        <div className="min-h-screen bg-gray-800 flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
-            <div className="max-w-md w-full space-y-8">
-                <div>
-                    <h2 className="mt-6 text-center text-3xl font-extrabold text-white">New Product Registration</h2>
-                </div>
-                <form className="mt-8 space-y-6" action="#" method="POST">
-                    <div className="rounded-md shadow-sm -space-y-px">
-                        <div>
-                            <label htmlFor="name" className="sr-only">Name</label>
-                            <input id="name" name="name" type="text" required className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 rounded-t-md focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Product Name" />
-                        </div>
-                        <div>
-                            <label htmlFor="price" className="sr-only">Price</label>
-                            <input id="price" name="price" type="number" required className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Price" />
-                        </div>
-                        <div>
-                            <label htmlFor="stock" className="sr-only">Stock Quantity</label>
-                            <input id="stock" name="stock" type="number" required className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Stock Quantity" />
-                        </div>
-                        <div>
-                            <label htmlFor="buying-price" className="sr-only">Buying Price</label>
-                            <input id="buying-price" name="buying-price" type="number" required className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Buying Price" />
-                        </div>
-                        <div>
-                            <label htmlFor="selling-price" className="sr-only">Selling Price</label>
-                            <input id="selling-price" name="selling-price" type="number" required className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Selling Price" />
-                        </div>
-                        <div>
-                            <label htmlFor="store-id" className="sr-only">Store ID</label>
-                            <input id="store-id" name="store-id" type="text" required className="appearance-none rounded-none relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" placeholder="Store ID" />
-                        </div>
-                        <div>
-                            <label htmlFor="image" className="sr-only">Image</label>
-                            <input id="image" name="image" type="file" required accept="image/*" className="appearance-none rounded-b-md relative block w-full px-3 py-2 border border-gray-300 placeholder-gray-500 text-gray-900 focus:outline-none focus:ring-blue-500 focus:border-blue-500 focus:z-10 sm:text-sm" />
-                        </div>
-                    </div>
+export default function NewClerkForm() {
+  return (
+    <FormControl defaultValue="" required>
+      <Label>Product Name</Label>
+      <StyledInput placeholder="Product Name" />
+      <Label>Price</Label>
+      <StyledInput placeholder="Price" />
+      <Label>Stock Quantity</Label>
+      <StyledInput placeholder="Stock Quantity" />
+      <Label>Buying Price</Label>
+      <StyledInput placeholder="Buying Price" />
+      <Label>Selling Price</Label>
+      <StyledInput placeholder="Selling Price" />
+      <Label>Store ID</Label>
+      <StyledInput placeholder="Store ID" />
+      <Label>Image URL (from Google)</Label>
+      <StyledInput placeholder="Image URL (from Google)" />
+      <HelperText />
+    </FormControl>
+  );
+}
 
-                    <div>
-                        <button type="submit" className="group relative w-full flex justify-center py-2 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                            Register
-                        </button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    );
+const StyledInput = styled(Input)(
+  ({ theme }) => `
+  .${inputClasses.input} {
+    width: 320px;
+    font-family: 'IBM Plex Sans', sans-serif;
+    font-size: 0.875rem;
+    font-weight: 400;
+    line-height: 1.5;
+    padding: 8px 12px;
+    border-radius: 8px;
+    color: ${theme.palette.mode === 'dark' ? grey[300] : grey[900]};
+    background: ${theme.palette.mode === 'dark' ? grey[900] : '#fff'};
+    border: 1px solid ${theme.palette.mode === 'dark' ? grey[700] : grey[200]};
+    box-shadow: 0px 2px 2px ${theme.palette.mode === 'dark' ? grey[900] : grey[50]};
+    &:hover {
+      border-color: ${blue[400]};
+    }
+    &:focus {
+      outline: 0;
+      border-color: ${blue[400]};
+      box-shadow: 0 0 0 3px ${theme.palette.mode === 'dark' ? blue[600] : blue[200]};
+    }
+  }
+`,
+);
+
+const Label = styled(({ children, className }) => {
+  const formControlContext = useFormControlContext();
+  const [dirty, setDirty] = React.useState(false);
+
+  React.useEffect(() => {
+    if (formControlContext?.filled) {
+      setDirty(true);
+    }
+  }, [formControlContext]);
+
+  if (formControlContext === undefined) {
+    return <p>{children}</p>;
+  }
+
+  const { error, required, filled } = formControlContext;
+  const showRequiredError = dirty && required && !filled;
+
+  return (
+    <p className={clsx(className, error || showRequiredError ? 'invalid' : '')}>
+      {children}
+      {required ? ' *' : ''}
+    </p>
+  );
+})`
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.875rem;
+  margin-bottom: 4px;
+
+  &.invalid {
+    color: red;
+  }
+`;
+
+const HelperText = styled((props) => {
+  const formControlContext = useFormControlContext();
+  const [dirty, setDirty] = React.useState(false);
+
+  React.useEffect(() => {
+    if (formControlContext?.filled) {
+      setDirty(true);
+    }
+  }, [formControlContext]);
+
+  if (formControlContext === undefined) {
+    return null;
+  }
+
+  const { required, filled } = formControlContext;
+  const showRequiredError = dirty && required && !filled;
+
+  return showRequiredError ? <p {...props}>This field is required.</p> : null;
+})`
+  font-family: 'IBM Plex Sans', sans-serif;
+  font-size: 0.875rem;
+`;
+
+const blue = {
+  100: '#DAECFF',
+  200: '#b6daff',
+  400: '#3399FF',
+  500: '#007FFF',
+  600: '#0072E5',
+  900: '#003A75',
 };
 
-export default NewClerkForm;
+const grey = {
+  50: '#F3F6F9',
+  100: '#E5EAF2',
+  200: '#DAE2ED',
+  300: '#C7D0DD',
+  400: '#B0B8C4',
+  500: '#9DA8B7',
+  600: '#6B7A90',
+  700: '#434D5B',
+  800: '#303740',
+  900: '#1C2025',
+};
