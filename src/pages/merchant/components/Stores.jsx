@@ -1,5 +1,3 @@
-// Store.jsx
-
 import React, { useState, useEffect } from "react";
 import "./Stores.css";
 import { jwtDecode } from 'jwt-decode';
