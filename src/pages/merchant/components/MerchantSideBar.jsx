@@ -11,7 +11,7 @@ function MerchantSideBar() {
                     <Link to="/View-performance" className="sidebar-link">View Perfomance</Link>
                 </li>
                 <li className="sidebar-item">
-                    <Link to="/store" className="sidebar-link">Store</Link>
+                    <Link to="/Stores" className="sidebar-link">Store</Link>
                 </li>
                 <li className="sidebar-item">
                     <Link to="/invite-admin" className="sidebar-link">Invite admin</Link>
