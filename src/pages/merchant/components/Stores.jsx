@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from "react";
 import "./Stores.css";
 import { jwtDecode } from 'jwt-decode';
@@ -71,4 +70,3 @@ function Stores() {
 }
 
 export default Stores;
-

@@ -1,3 +1,4 @@
+
 import { useState } from 'react'
 import './App.css'
 import Login from './pages/Auth/login';
@@ -10,8 +11,7 @@ import MerchantDashboard from './pages/merchant/MerchantDashboard';
 import InviteAdmin from './pages/merchant/components/InviteAdmin';
 import Stores from './pages/merchant/components/Stores';
 
-
-export const BASE_URL='https://deploying-myduka-backend.onrender.com';
+export const BASE_URL = 'https://deploying-myduka-backend.onrender.com';
 
 function App() {
   return (
@@ -28,4 +28,3 @@ function App() {
 }
 
 export default App;
-
