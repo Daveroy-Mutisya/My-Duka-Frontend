@@ -1,6 +1,4 @@
-export const BASE_URL='https://deploying-myduka-backend.onrender.com';
-
-import * as React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import Table from '@mui/material/Table';
 import TableBody from '@mui/material/TableBody';
@@ -9,22 +7,29 @@ import TableContainer from '@mui/material/TableContainer';
 import TableHead from '@mui/material/TableHead';
 import TableRow from '@mui/material/TableRow';
 import Paper from '@mui/material/Paper';
-import Button from '@mui/material/Button'; // Import MUI Button
+import Button from '@mui/material/Button';
 
-function createData(name, price, stock_quantity, buying_price, selling_price, store_id, image) {
-  return { name, price, stock_quantity, buying_price, selling_price, store_id, image };
-}
-
-const rows = [
-  createData('Product Name 1', 99.99, 100, 50.00, 99.99, 'Store_123', 'path_to_image'),
-  createData('Product Name 2', 99.99, 100, 50.00, 99.99, 'Store_123', 'path_to_image'),
-  createData('Product Name 3', 99.99, 100, 50.00, 99.99, 'Store_123', 'path_to_image'),
-  createData('Product Name 4', 99.99, 100, 50.00, 99.99, 'Store_123', 'path_to_image'),
-  createData('Product Name 5', 99.99, 100, 50.00, 99.99, 'Store_123', 'path_to_image'),
-  createData('Product Name 6', 99.99, 100, 50.00, 99.99, 'Store_123', 'path_to_image'),
-];
+export const BASE_URL = 'https://deploying-myduka-backend.onrender.com';
 
 export default function Tables() {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    fetch(`${BASE_URL}/api/products`)
+      .then(response => {
+        if (!response.ok) {
+          throw new Error('Network response was not ok');
+        }
+        return response.json();
+      })
+      .then(data => {
+        setProducts(data);
+      })
+      .catch(error => {
+        console.error('Error fetching products:', error);
+      });
+  }, []);
+
   const styles = {
     container: {
       padding: "20px",
@@ -48,13 +53,13 @@ export default function Tables() {
       textDecoration: "none"
     },
     table: {
-      backgroundColor: "#f5f5f5", // Light grey background for the table
+      backgroundColor: "#f5f5f5",
     },
     tableHeader: {
-      backgroundColor: "#e0e0e0", // Slightly darker grey for the header
+      backgroundColor: "#e0e0e0",
     },
     tableCell: {
-      color: "#333", // Dark grey text color for better contrast
+      color: "#333",
     },
   };
 
@@ -95,21 +100,21 @@ export default function Tables() {
             </TableRow>
           </TableHead>
           <TableBody>
-            {rows.map((row) => (
+            {products.map((product) => (
               <TableRow
-                key={row.name}
+                key={product.name}
                 sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
               >
                 <TableCell component="th" scope="row" sx={styles.tableCell}>
-                  {row.name}
+                  {product.name}
                 </TableCell>
-                <TableCell align="right" sx={styles.tableCell}>{row.price}</TableCell>
-                <TableCell align="right" sx={styles.tableCell}>{row.stock_quantity}</TableCell>
-                <TableCell align="right" sx={styles.tableCell}>{row.buying_price}</TableCell>
-                <TableCell align="right" sx={styles.tableCell}>{row.selling_price}</TableCell>
-                <TableCell align="right" sx={styles.tableCell}>{row.store_id}</TableCell>
+                <TableCell align="right" sx={styles.tableCell}>{product.price}</TableCell>
+                <TableCell align="right" sx={styles.tableCell}>{product.stock_quantity}</TableCell>
+                <TableCell align="right" sx={styles.tableCell}>{product.buying_price}</TableCell>
+                <TableCell align="right" sx={styles.tableCell}>{product.selling_price}</TableCell>
+                <TableCell align="right" sx={styles.tableCell}>{product.store_id}</TableCell>
                 <TableCell align="center" sx={styles.tableCell}>
-                  <img src={row.image} alt="product image" width="50px" />
+                  <img src={product.image} alt="product" width="50px" />
                 </TableCell>
               </TableRow>
             ))}

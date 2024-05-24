@@ -89,6 +89,8 @@
 // export default Products;
 
 
+import * as React from 'react';
+import { useNavigate } from 'react-router-dom'; // Import useNavigate hook
 import { FormControl, useFormControlContext } from '@mui/base/FormControl';
 import { Input, inputClasses } from '@mui/base/Input';
 import { styled } from '@mui/system';
@@ -96,28 +98,66 @@ import Button from '@mui/material/Button';
 import clsx from 'clsx';
 
 export default function NewClerkForm() {
+  const navigate = useNavigate(); // Initialize useNavigate
+
+  const [productName, setProductName] = React.useState('');
+  const [price, setPrice] = React.useState('');
+  const [stockQuantity, setStockQuantity] = React.useState('');
+  const [buyingPrice, setBuyingPrice] = React.useState('');
+  const [sellingPrice, setSellingPrice] = React.useState('');
+  const [storeId, setStoreId] = React.useState('');
+  const [imageUrl, setImageUrl] = React.useState('');
+
+  const handleSubmit = (event) => {
+    event.preventDefault(); // Prevent default form submission
+    console.log({
+      productName,
+      price,
+      stockQuantity,
+      buyingPrice,
+      sellingPrice,
+      storeId,
+      imageUrl
+    });
+    navigate('/Products'); // Navigate to /Products route
+  };
+
   return (
     <StyledDiv>
-      <FormControl defaultValue="" required>
-        <Label>Product Name</Label>
-        <StyledInput placeholder="Product Name" />
-        <Label>Price</Label>
-        <StyledInput placeholder="Price" />
-        <Label>Stock Quantity</Label>
-        <StyledInput placeholder="Stock Quantity" />
-        <Label>Buying Price</Label>
-        <StyledInput placeholder="Buying Price" />
-        <Label>Selling Price</Label>
-        <StyledInput placeholder="Selling Price" />
-        <Label>Store ID</Label>
-        <StyledInput placeholder="Store ID" />
-        <Label>Image URL (from Google)</Label>
-        <StyledInput placeholder="Image URL (from Google)" />
+      <form onSubmit={handleSubmit}>
+        <FormControl required value={productName} onChange={(e) => setProductName(e.target.value)}>
+          <Label>Name</Label>
+          <StyledInput placeholder="Product Name" />
+        </FormControl>
+        <FormControl required value={price} onChange={(e) => setPrice(e.target.value)}>
+          <Label>Price</Label>
+          <StyledInput placeholder="Price" />
+        </FormControl>
+        <FormControl required value={stockQuantity} onChange={(e) => setStockQuantity(e.target.value)}>
+          <Label>Stock Quantity</Label>
+          <StyledInput placeholder="Stock Quantity" />
+        </FormControl>
+        <FormControl required value={buyingPrice} onChange={(e) => setBuyingPrice(e.target.value)}>
+          <Label>Buying Price</Label>
+          <StyledInput placeholder="Buying Price" />
+        </FormControl>
+        <FormControl required value={sellingPrice} onChange={(e) => setSellingPrice(e.target.value)}>
+          <Label>Selling Price</Label>
+          <StyledInput placeholder="Selling Price" />
+        </FormControl>
+        <FormControl required value={storeId} onChange={(e) => setStoreId(e.target.value)}>
+          <Label>Store ID</Label>
+          <StyledInput placeholder="Store ID" />
+        </FormControl>
+        <FormControl required value={imageUrl} onChange={(e) => setImageUrl(e.target.value)}>
+          <Label>Image URL (from Google)</Label>
+          <StyledInput placeholder="Image URL (from Google)" />
+        </FormControl>
         <HelperText />
-        <Button variant="contained" disableElevation>
+        <Button type="submit" variant="contained" disableElevation>
           Submit
         </Button>
-      </FormControl>
+      </form>
     </StyledDiv>
   );
 }
@@ -265,87 +305,4 @@ const grey = {
   900: '#1C2025',
 };
 
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-
-const BASE_URL = 'https://deploying-myduka-backend.onrender.com'; 
-
-const Products = () => {
-  const [products, setProducts] = useState([]);
-  const [name, setName] = useState('');
-  const [description, setDescription] = useState('');
-  const [price, setPrice] = useState('');
-
-  useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        const response = await axios.get(`${BASE_URL}/products`);
-        setProducts(response.data);
-      } catch (error) {
-        console.error("Error fetching products:", error);
-      }
-    };
-
-    fetchProducts();
-  }, []);
-
-  const handleAddProduct = async (e) => {
-    e.preventDefault();
-    try {
-      const newProduct = { name, description, price };
-      const response = await axios.post(`${BASE_URL}/products`, newProduct);
-      setProducts([...products, response.data]);
-      setName('');
-      setDescription('');
-      setPrice('');
-    } catch (error) {
-      console.error("Error adding product:", error);
-    }
-  };
-
-  return (
-    <div>
-      <h1>Products</h1>
-      <form onSubmit={handleAddProduct}>
-        <div>
-          <label>Product Name:</label>
-          <input
-            type="text"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Description:</label>
-          <input
-            type="text"
-            value={description}
-            onChange={(e) => setDescription(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Price:</label>
-          <input
-            type="number"
-            value={price}
-            onChange={(e) => setPrice(e.target.value)}
-            required
-          />
-        </div>
-        <button type="submit">Add Product</button>
-      </form>
-      <div>
-        {products.map((product) => (
-          <div key={product.id}>
-            <h2>{product.name}</h2>
-            <p>{product.description}</p>
-            <p>${product.price}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-};
 
